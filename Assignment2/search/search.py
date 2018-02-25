@@ -87,17 +87,89 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    print "Start:", problem.getStartState()
+    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+    print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    # create stack
+    fringe = util.Stack()
+    # create list of movement instructions and list of visited nodes
+    startmovements,visited=[],[] 
+    # add starting node to the stack
+    startnode = (problem.getStartState(), startmovements)
+    fringe.push(startnode)
+
+    # while the stack isn't empty
+    while (not fringe.isEmpty()):
+        # get the top of the stack
+        state,movements = fringe.pop()
+        # if current state is the solution, return movements
+        if(problem.isGoalState(state)):
+            return movements
+        # else get the successors of the current state and add them to the stack
+        for coordinates,direction,steps in problem.getSuccessors(state):
+            # if successor node has not been visited before
+            if(not coordinates in visited):
+                visited.append(coordinates)
+                fringe.push((coordinates,movements+[direction]))
+    # no solution
+    return [] 
+        
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # create queue
+    fringe = util.Queue()
+    # create list of movement instructions and list of visited nodes
+    startmovements,visited=[],[] 
+    
+    # add starting node to the queue
+    startnode = (problem.getStartState(), startmovements)
+    fringe.push(startnode)
+
+    # while the queue isn't empty
+    while (not fringe.isEmpty()):
+        # get the front of the queue
+        state,movements = fringe.pop()
+        # if current state is the solution return movements
+        if(problem.isGoalState(state)):
+            return movements
+        # otherewise add the successors to the queue
+        for coordinates,direction,steps in problem.getSuccessors(state):
+            # if node has not been visited before
+            if(not coordinates in visited):
+                visited.append(coordinates)
+                fringe.push((coordinates,movements+[direction]))
+    # no solution
+    return [] 
+    
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # create priority queue
+    fringe = util.PriorityQueue()
+    # create list of movement instructions and list of visited nodes
+    startmovements,visited=[],[] 
+    
+    # add starting node to the priority queue
+    startnode = (problem.getStartState(), startmovements)
+    fringe.push(startnode, problem.getCostOfActions(startmovements))
+
+    # while the priority queue isn't empty
+    while (not fringe.isEmpty()):
+        # get the front of the priority queue
+        state,movements = fringe.pop()
+        if(problem.isGoalState(state)):
+            return movements
+        # otherwise add successors to the priority queue
+        for coordinates,direction,steps in problem.getSuccessors(state):
+            # if node has not been visited before
+            if(not coordinates in visited):
+                visited.append(coordinates)
+                fringe.push((coordinates,movements+[direction]), problem.getCostOfActions(movements))
+    # no solution
+    return [] 
 
 def nullHeuristic(state, problem=None):
     """
@@ -109,7 +181,29 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    
+    fringe =  util.PriorityQueue()
+    # create list of movement instructions and list of visited nodes
+    startmovements,visited=[],[] 
+    
+    # add starting node to the priority queue
+    startnode = (problem.getStartState(), startmovements)
+    fringe.push(startnode, heuristic(problem.getStartState(),problem))
+
+    # while the priority queue isn't empty
+    while (not fringe.isEmpty()):
+        # get the front of the priority queue
+        state,movements = fringe.pop()
+        if(problem.isGoalState(state)):
+            return movements
+        # otherwise add successors to the priority queue
+        for coordinates,direction,steps in problem.getSuccessors(state):
+            # if node has not been visited before
+            if(not coordinates in visited):
+                visited.append(coordinates)
+                fringe.push((coordinates,movements+[direction]), heuristic(coordinates,problem))
+    # no solution
+    return [] 
 
 
 # Abbreviations
