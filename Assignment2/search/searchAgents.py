@@ -266,6 +266,11 @@ def euclideanHeuristic(position, problem, info={}):
 # This portion is incomplete.  Time to write code!  #
 #####################################################
 
+# To determine how to approach the problem, I consulted the following Github repositories:
+# https://github.com/kevjames3/CS188.1x-Project1
+# https://github.com/shiro873/pacman-projects/tree/master/p1_search
+# https://github.com/ani94/Pacman-Project
+
 class CornersProblem(search.SearchProblem):
     """
     This search problem finds paths through all four corners of a layout.
@@ -288,6 +293,13 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        
+        #print(self.corners)
+        
+        # set the start state
+        self.startState = (self.startingPosition, [])
+
+
 
     def getStartState(self):
         """
@@ -295,14 +307,24 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.startState
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # Get current position
+        coordinates = state[0]
+        visited_corners = state[1]
+        # check if current position is a corner
+        if coordinates in self.corners:
+            # if this corner has not been visited before add it to the list
+            if coordinates not in visited_corners:
+                visited_corners.append(coordinates)
+            # if all 4 corners have been visited return true
+            return len(visited_corners)==4        
+        return False
 
     def getSuccessors(self, state):
         """
@@ -325,6 +347,26 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            # get state position and list of visited corenrs
+            x,y = state[0]
+            visited_corners = state[1]
+            # check if movement would hit a wall
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
+            if not hitsWall:
+                # create next position tuple
+                next_coord = (nextx, nexty)
+                # copy list of visited corners to a new list
+                successor_visited = list(visited_corners)
+                # check if next position is a corner
+                if next_coord in self.corners:
+                    # add the corner to the list of visited corners associated with that position
+                    if not next_coord in successor_visited:
+                        successor_visited.append(next_coord)
+                # add position + list of visited corners to successors
+                successor = ((next_coord, successor_visited), action, 1)
+                successors.append(successor)
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -360,7 +402,23 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    coordinates = state[0]
+    visited_corners = state[1]
+    unvisited_corners = list(corners)
+    for corner in visited_corners:
+        unvisited_corners.remove(corner)
+
+    heuristic = 0    
+    # use manahattan distance from util.py
+    while (len(unvisited_corners) > 0):
+        # find the corner closest to the current position
+        distances = [(util.manhattanDistance(coordinates, corner), corner) for corner in unvisited_corners]
+        distance, corner = min(distances)
+        heuristic+= distance
+        coordinates = corner # loop will repeat to find corner nearest the closest corner, effectively finding a path
+        unvisited_corners.remove(corner)
+
+    return heuristic # Default to trivial solution 0
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -454,7 +512,17 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    tot_distance = 0
+    
+    # expands ~3000 nodes if use sum of distances
+    # expands ~7000 nodes if use max distance
+    distances = [util.manhattanDistance(food, position) for food in foodGrid.asList()]
+    for d in distances:
+        if d > tot_distance:
+            tot_distance = d
+
+    
+    return tot_distance
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -485,7 +553,11 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # use breadth first search to solve
+        movements = search.bfs(problem)
+
+        return movements
+
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -521,7 +593,12 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # get the distance to all food
+        foods = self.food.asList()
+        distances = [(util.manhattanDistance(state, food), food) for food in foods]
+        # find the nearest one
+        distance, food = min(distances)
+        return state == food
 
 def mazeDistance(point1, point2, gameState):
     """
