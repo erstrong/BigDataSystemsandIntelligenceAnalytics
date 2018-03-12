@@ -42,17 +42,18 @@ To train the model:
 Create the training-images directories and subdirectories and the test-images directory. Then copy the contents:
 
 ```
-cp /host/Users/<path>/training-images/keira-knightley/* training-images/keira-knightley/
+cp /host/Users/<path>/training-images//* training-images/
 ``````
+Note: The copy will take a long time.
 
 For the lfw folder:
 ```
-cp -r /host/Users/<path>/training-images/lfw/* training-images/lfw/
+# if using full LFW data set
 mv training-images/lfw/* training-images/
+# remove lfw directory for either scenario
 rm -r training-images/lfw/
 
 ``````
-Note: The copy will take a long time.
 
 Next follow the instructions from [Demo 3: Training a Classifier](https://cmusatyalab.github.io/openface/demo-3-classifier/) to perform the face detection and alignment.
 
