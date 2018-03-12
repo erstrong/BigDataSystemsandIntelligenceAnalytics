@@ -42,7 +42,8 @@ To train the model:
 Create the training-images directories and subdirectories and the test-images directory. Then copy the contents:
 
 ```
-cp /host/Users/<path>/training-images//* training-images/
+cp /host/Users/<path>/training-images/* training-images/
+cp /host/Users/<path>/test-images/* test-images/
 ``````
 Note: The copy will take a long time.
 
