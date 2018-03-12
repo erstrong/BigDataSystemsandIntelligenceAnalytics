@@ -2,7 +2,14 @@
 
 # LFW
 Download url: http://vis-www.cs.umass.edu/lfw/lfw.tgz
-Folders for Keira Knightley, Meryl Streep, Morgan Freeman, and Tom Hanks were removed:
+Folders for Keira Knightley, Meryl Streep, Morgan Freeman, and Tom Hanks were removed, as well as the following due to errors during training:
+* Lynne_Thigpen
+* Mercedes_Amor  
+* Jerry_Rice
+* Annika_Sorenstam
+* Katie_Smith
+* Ed_Mekertichian
+* Jeffrey_Pfeffer 
 
 ## Keira Knightley
 1-2: http://vis-www.cs.umass.edu/lfw/person/Keira_Knightley.html
