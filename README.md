@@ -45,6 +45,15 @@ Create the training-images directories and subdirectories and the test-images di
 cp /host/Users/<path>/training-images/keira-knightley/* training-images/keira-knightley/
 ``````
 
+For the lfw folder:
+```
+cp -r /host/Users/<path>/training-images/lfw/* training-images/lfw/
+mv training-images/lfw/* training-images/
+rm -r training-images/lfw/
+
+``````
+Note: The copy will take a long time.
+
 Next follow the instructions from [Demo 3: Training a Classifier](https://cmusatyalab.github.io/openface/demo-3-classifier/) to perform the face detection and alignment.
 
 ```
@@ -69,21 +78,19 @@ Testing the classifier:
 ./demos/classifier.py infer ./generated-embeddings/classifier.pkl test-images/keira_knightley1.jpg
 ``````
 
-Test image validation:
-Keira Knightley:
-Natalie Portman:
-Meryl Streep: "Predict meryl-streep with 0.89 confidence."
-Tom Hanks: "Predict tom-hanks with 0.70 confidence."
-Morgan Freeman: "Predict morgan-freeman with 0.77 confidence."
-cat: "Exception: Unable to find a face: test-images/cat.jpg"
-bicycle: "Exception: Unable to find a face: test-images/bicycle.jpg"
-
 # Running the Code
 
 # Built With
 * OpenFace
 * Labeled Faces In The Wild
 * Additional Images (see note)
+
+# Image Sources
+Citations are in Images.md
+
+Wherever possible, the images used in this project are from the LFW set or have a creative commons license. These include the images of Meryl Streep, Tom Hanks, Morgan Freeman, the cat and the bicycle. 
+
+Due to the similarity of Keira Knightley and Natalie Portman, a larger number of images were necessary to train the model to correctly categorize the test images, exceeding what I was able to find under a creative commons license. Some of the images are thus copyrighted and are used in this project under academic fair use. They are included in this repository soley for reproducibility of my results.
 
 # Authors
 * Emily Strong
