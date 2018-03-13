@@ -3,3 +3,9 @@
 
 # Zip files for Blackboard
 .zip
+
+# Images
+.jpg
+test-images/*
+training-images/*
+
