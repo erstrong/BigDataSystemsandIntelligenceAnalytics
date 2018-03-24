@@ -1,0 +1,307 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf470
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0\fs22 \cf0 \CocoaLigature0 EMILYs-MacBook-Air:Assignment3 emily-air13$ pyspark --packages graphframes:graphframes:0.5.0-spark2.1-s_2.11\
+Python 3.6.3 |Anaconda custom (64-bit)| (default, Nov  8 2017, 18:10:31) \
+[GCC 4.2.1 Compatible Clang 4.0.1 (tags/RELEASE_401/final)] on darwin\
+Type "help", "copyright", "credits" or "license" for more information.\
+Ivy Default Cache set to: /Users/emily-air13/.ivy2/cache\
+The jars for the packages stored in: /Users/emily-air13/.ivy2/jars\
+:: loading settings :: url = jar:file:/Users/emily-air13/anaconda3/lib/python3.6/site-packages/pyspark/jars/ivy-2.4.0.jar!/org/apache/ivy/core/settings/ivysettings.xml\
+graphframes#graphframes added as a dependency\
+:: resolving dependencies :: org.apache.spark#spark-submit-parent;1.0\
+	confs: [default]\
+	found graphframes#graphframes;0.5.0-spark2.1-s_2.11 in spark-packages\
+	found com.typesafe.scala-logging#scala-logging-api_2.11;2.1.2 in central\
+	found com.typesafe.scala-logging#scala-logging-slf4j_2.11;2.1.2 in central\
+	found org.scala-lang#scala-reflect;2.11.0 in central\
+	found org.slf4j#slf4j-api;1.7.7 in central\
+:: resolution report :: resolve 630ms :: artifacts dl 25ms\
+	:: modules in use:\
+	com.typesafe.scala-logging#scala-logging-api_2.11;2.1.2 from central in [default]\
+	com.typesafe.scala-logging#scala-logging-slf4j_2.11;2.1.2 from central in [default]\
+	graphframes#graphframes;0.5.0-spark2.1-s_2.11 from spark-packages in [default]\
+	org.scala-lang#scala-reflect;2.11.0 from central in [default]\
+	org.slf4j#slf4j-api;1.7.7 from central in [default]\
+	---------------------------------------------------------------------\
+	|                  |            modules            ||   artifacts   |\
+	|       conf       | number| search|dwnlded|evicted|| number|dwnlded|\
+	---------------------------------------------------------------------\
+	|      default     |   5   |   0   |   0   |   0   ||   5   |   0   |\
+	---------------------------------------------------------------------\
+:: retrieving :: org.apache.spark#spark-submit-parent\
+	confs: [default]\
+	0 artifacts copied, 5 already retrieved (0kB/54ms)\
+2018-03-23 21:51:11 WARN  NativeCodeLoader:62 - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\
+Setting default log level to "WARN".\
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).\
+Welcome to\
+      ____              __\
+     / __/__  ___ _____/ /__\
+    _\\ \\/ _ \\/ _ `/ __/  '_/\
+   /__ / .__/\\_,_/_/ /_/\\_\\   version 2.3.0\
+      /_/\
+\
+Using Python version 3.6.3 (default, Nov  8 2017 18:10:31)\
+SparkSession available as 'spark'.\
+>>> sqlContext = SQLContext(sc)\
+>>> inputPath1 = "graphdata/people_images.csv"\
+>>> vertices = sqlContext.read.options(header='true', inferSchema='true').csv(inputPath1)\
+2018-03-23 21:53:01 WARN  ObjectStore:568 - Failed to get database global_temp, returning NoSuchObjectException\
+>>> vertices.show(5)                                                            \
++---------------+------+\
+|             id|  type|\
++---------------+------+\
+|  Aaron_Eckhart|person|\
+|    Aaron_Guiel|person|\
+|Aaron_Patterson|person|\
+|  Aaron_Peirsol|person|\
+|     Aaron_Pena|person|\
++---------------+------+\
+only showing top 5 rows\
+\
+>>> inputPath2 = "graphdata/imagelabels.csv"\
+>>> edges = sqlContext.read.options(header='true', inferSchema='true').csv(inputPath2)\
+>>> edges.show(5)\
++--------------------+---------------+------------+\
+|                 src|            dst|relationship|\
++--------------------+---------------+------------+\
+|Aaron_Eckhart_000...|  Aaron_Eckhart|       label|\
+|Aaron_Guiel_0001.jpg|    Aaron_Guiel|       label|\
+|Aaron_Patterson_0...|Aaron_Patterson|       label|\
+|Aaron_Peirsol_000...|  Aaron_Peirsol|       label|\
+|Aaron_Peirsol_000...|  Aaron_Peirsol|       label|\
++--------------------+---------------+------------+\
+only showing top 5 rows\
+\
+>>> vertices.printSchema()\
+root\
+ |-- id: string (nullable = true)\
+ |-- type: string (nullable = true)\
+\
+>>> edges.printSchema()\
+root\
+ |-- src: string (nullable = true)\
+ |-- dst: string (nullable = true)\
+ |-- relationship: string (nullable = true)\
+\
+>>> \
+>>> from graphframes import *\
+>>> g = GraphFrame(vertices, edges)\
+>>> g.show()\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+AttributeError: 'GraphFrame' object has no attribute 'show'\
+>>> g.show()\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+AttributeError: 'GraphFrame' object has no attribute 'show'\
+>>> g\
+GraphFrame(v:[id: string, type: string], e:[src: string, dst: string ... 1 more field])\
+>>> g.inDegrees.show()\
++--------------------+--------+\
+|                  id|inDegree|\
++--------------------+--------+\
+|     Aaron_Patterson|       1|\
+|          Ain_Seppik|       1|\
+|    Alejandro_Lerner|       1|\
+|           Ben_Braun|       1|\
+|       Chris_Cornell|       1|\
+|       Claudio_Lopez|       1|\
+|       Darren_Clarke|       2|\
+|      Elodie_Bouchez|       1|\
+|    Francisco_Santos|       1|\
+|    Gala_Leon_Garcia|       1|\
+|Hans-Christian_Sc...|       1|\
+| Jewel_Howard-Taylor|       1|\
+|         John_Lennon|       1|\
+|          John_White|       1|\
+|         Leuris_Pupo|       1|\
+|       Marricia_Tate|       1|\
+|      Martha_Stewart|       5|\
+|       Masaru_Hayami|       1|\
+| Robert_Korzeniowski|       1|\
+|          Sandy_Wise|       1|\
++--------------------+--------+\
+only showing top 20 rows\
+\
+>>> g.edges.filter("relationship = 'label'").count()\
+13233\
+>>> g.edges.filter("relationship = 'errata'").count()\
+24\
+>>> g.connectedComponents().show()\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+  File "/private/var/folders/zv/jhpt0syn7zq7_494rznwrb1h0000gn/T/spark-e2032d4b-b9d6-4bb7-92ca-5ab30557b5f6/userFiles-45e3a9b0-8b2c-436c-838c-d69309df6a3f/graphframes_graphframes-0.5.0-spark2.1-s_2.11.jar/graphframes/graphframe.py", line 279, in connectedComponents\
+  File "/Users/emily-air13/anaconda3/lib/python3.6/site-packages/pyspark/python/lib/py4j-0.10.6-src.zip/py4j/java_gateway.py", line 1160, in __call__\
+  File "/Users/emily-air13/anaconda3/lib/python3.6/site-packages/pyspark/sql/utils.py", line 63, in deco\
+    return f(*a, **kw)\
+  File "/Users/emily-air13/anaconda3/lib/python3.6/site-packages/pyspark/python/lib/py4j-0.10.6-src.zip/py4j/protocol.py", line 320, in get_return_value\
+py4j.protocol.Py4JJavaError: An error occurred while calling o64.run.\
+: java.io.IOException: Checkpoint directory is not set. Please set it first using sc.setCheckpointDir().\
+	at org.graphframes.lib.ConnectedComponents$$anonfun$2.apply(ConnectedComponents.scala:280)\
+	at org.graphframes.lib.ConnectedComponents$$anonfun$2.apply(ConnectedComponents.scala:280)\
+	at scala.Option.getOrElse(Option.scala:121)\
+	at org.graphframes.lib.ConnectedComponents$.org$graphframes$lib$ConnectedComponents$$run(ConnectedComponents.scala:279)\
+	at org.graphframes.lib.ConnectedComponents.run(ConnectedComponents.scala:139)\
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\
+	at java.lang.reflect.Method.invoke(Method.java:498)\
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)\
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:357)\
+	at py4j.Gateway.invoke(Gateway.java:282)\
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)\
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)\
+	at py4j.GatewayConnection.run(GatewayConnection.java:214)\
+	at java.lang.Thread.run(Thread.java:745)\
+\
+>>> sc.setCheckpointDir("checkpoints")\
+>>> g.connectedComponents().show()\
++--------------------+------+-------------+                                     \
+|                  id|  type|    component|\
++--------------------+------+-------------+\
+|       Aaron_Eckhart|person| 515396075520|\
+|         Aaron_Guiel|person| 798863917056|\
+|     Aaron_Patterson|person|            0|\
+|       Aaron_Peirsol|person|  60129542144|\
+|          Aaron_Pena|person|  34359738368|\
+|        Aaron_Sorkin|person|1288490188800|\
+|        Aaron_Tippin|person| 824633720832|\
+|           Abba_Eban|person|  17179869184|\
+|    Abbas_Kiarostami|person| 816043786240|\
+| Abdel_Aziz_Al-Hakim|person| 498216206336|\
+|  Abdel_Madi_Shabneh|person| 197568495616|\
+| Abdel_Nasser_Assidi|person| 781684047873|\
+|      Abdoulaye_Wade|person|  94489280512|\
+|Abdul_Majeed_Shob...|person| 841813590016|\
+|        Abdul_Rahman|person| 292057776128|\
+|   Abdulaziz_Kamilov|person|  34359738369|\
+|            Abdullah|person|  25769803776|\
+|Abdullah_Ahmad_Ba...|person| 335007449088|\
+| Abdullah_al-Attiyah|person| 472446402560|\
+|        Abdullah_Gul|person|  42949673030|\
++--------------------+------+-------------+\
+only showing top 20 rows\
+\
+>>> g.stronglyConnectedComponents(maxIter=10).show()\
++--------------------+------+------------+                                      \
+|                  id|  type|   component|\
++--------------------+------+------------+\
+|    Francisco_Santos|person|          26|\
+|George_W_Bush_006...| image|          29|\
+|Maria_Garcia_0001...| image|  8589934658|\
+|Gerhard_Schroeder...| image| 34359738398|\
+|Nicanor_Duarte_Fr...| image| 60129542213|\
+|Justin_Guarini_00...| image| 68719476787|\
+|Mauricio_Macri_00...| image| 68719476798|\
+|          Gray_Davis|person| 77309411361|\
+|Richard_Myers_000...| image| 94489280590|\
+|Andrew_Fastow_000...| image|137438953476|\
+|   Bob_Dole_0003.jpg| image|146028888066|\
+|George_W_Bush_043...| image|146028888086|\
+|Elijah_Wood_0003.jpg| image|206158430228|\
+|         Mae_Jemison|person|214748364866|\
+|Camille_Colvin_00...| image|231928233998|\
+|Mario_Vasquez_Ran...| image|240518168636|\
+|       Jerelle_Kraus|person|257698037791|\
+|        Gary_Barnett|person|335007449116|\
+|Russell_Crowe_000...| image|343597383765|\
+|Alejandro_Toledo_...| image|377957122049|\
++--------------------+------+------------+\
+only showing top 20 rows\
+\
+>>> results = g.pageRank(resetProbability=0.15, tol=0.01)\
+>>> results.vertices.show()                                                     \
++--------------------+------+------------------+\
+|                  id|  type|          pagerank|\
++--------------------+------+------------------+\
+|    Francisco_Santos|person|1.1616942946308764|\
+|George_W_Bush_006...| image|0.6279428619626359|\
+|Maria_Garcia_0001...| image|0.6279428619626359|\
+|Gerhard_Schroeder...| image|0.6279428619626359|\
+|Nicanor_Duarte_Fr...| image|0.6279428619626359|\
+|Justin_Guarini_00...| image|0.6279428619626359|\
+|Mauricio_Macri_00...| image|0.6279428619626359|\
+|          Gray_Davis|person|14.505480111336883|\
+|Richard_Myers_000...| image|0.6279428619626359|\
+|Andrew_Fastow_000...| image|0.6279428619626359|\
+|   Bob_Dole_0003.jpg| image|0.6279428619626359|\
+|George_W_Bush_043...| image|0.6279428619626359|\
+|Elijah_Wood_0003.jpg| image|0.6279428619626359|\
+|         Mae_Jemison|person|1.1616942946308764|\
+|Camille_Colvin_00...| image|0.6279428619626359|\
+|Mario_Vasquez_Ran...| image|0.6279428619626359|\
+|       Jerelle_Kraus|person|1.1616942946308764|\
+|        Gary_Barnett|person|1.1616942946308764|\
+|Russell_Crowe_000...| image|0.6279428619626359|\
+|Alejandro_Toledo_...| image|0.6279428619626359|\
++--------------------+------+------------------+\
+only showing top 20 rows\
+\
+>>> results.edges.show()\
++--------------------+--------------------+------------+------+                 \
+|                 src|                 dst|relationship|weight|\
++--------------------+--------------------+------------+------+\
+|Lars_Burgsmuller_...|    Lars_Burgsmuller|       label|   1.0|\
+|Dean_Barkley_0004...|        Dean_Barkley|       label|   1.0|\
+|Nicolas_Cage_0002...|        Nicolas_Cage|       label|   1.0|\
+|Cameron_Diaz_0004...|        Cameron_Diaz|       label|   1.0|\
+|Paul_William_Hurl...| Paul_William_Hurley|       label|   1.0|\
+|Wayne_Brady_0001.jpg|         Wayne_Brady|       label|   1.0|\
+|Andy_Rooney_0001.jpg|         Andy_Rooney|       label|   1.0|\
+| Barry_Zito_0001.jpg|          Barry_Zito|       label|   1.0|\
+|Michael_Schumache...|  Michael_Schumacher|       label|   1.0|\
+|Colin_Powell_0189...|        Colin_Powell|       label|   1.0|\
+| Tony_Blair_0001.jpg|          Tony_Blair|       label|   1.0|\
+|Jeffrey_Katzenber...|  Jeffrey_Katzenberg|       label|   1.0|\
+|Donald_Rumsfeld_0...|     Donald_Rumsfeld|       label|   1.0|\
+|Mark_Philippoussi...|  Mark_Philippoussis|       label|   1.0|\
+|Raul_Castaneda_00...|      Raul_Castaneda|       label|   1.0|\
+|Daniele_Bergamin_...|    Daniele_Bergamin|       label|   1.0|\
+|Gordon_Brown_0012...|        Gordon_Brown|       label|   1.0|\
+|Jan_Ullrich_0002.jpg|         Jan_Ullrich|       label|   1.0|\
+|Christian_Von_Wer...|Christian_Von_Wer...|       label|   1.0|\
+|Arturo_Gatti_0001...|        Arturo_Gatti|       label|   1.0|\
++--------------------+--------------------+------------+------+\
+only showing top 20 rows\
+\
+>>> g.edges.filter("dst = 'George_W_Bush'").count()\
+530\
+>>> t = g.edges.groupby("dst").count().orderBy("count", ascending=False)\
+>>> t.show()\
++--------------------+-----+                                                    \
+|                 dst|count|\
++--------------------+-----+\
+|       George_W_Bush|  530|\
+|        Colin_Powell|  236|\
+|          Tony_Blair|  144|\
+|     Donald_Rumsfeld|  121|\
+|   Gerhard_Schroeder|  109|\
+|        Ariel_Sharon|   77|\
+|         Hugo_Chavez|   71|\
+|   Junichiro_Koizumi|   60|\
+|       Jean_Chretien|   55|\
+|       John_Ashcroft|   53|\
+|     Serena_Williams|   52|\
+|      Jacques_Chirac|   52|\
+|      Vladimir_Putin|   49|\
+|Luiz_Inacio_Lula_...|   48|\
+|Gloria_Macapagal_...|   44|\
+|   Jennifer_Capriati|   42|\
+|Arnold_Schwarzene...|   42|\
+|          Laura_Bush|   41|\
+|      Lleyton_Hewitt|   41|\
+|    Alejandro_Toledo|   39|\
++--------------------+-----+\
+only showing top 20 rows\
+\
+>>> sc.close()\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+AttributeError: 'SparkContext' object has no attribute 'close'\
+>>> sc.stop()\
+>>> exit()}
