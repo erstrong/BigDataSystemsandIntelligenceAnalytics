@@ -5,23 +5,6 @@ Term project for CSYE 6245: Big Data Systems & Intelligence Analytics
 
 This project evaluates the vulnerability of facial recognition algorithms to malicious attacks. Sharif et al (2016) found that these algorithms are vulnerable to adversarial examples just as other image classification algorithms are, however their adversarial input was conspicious and would easily be detected by a person viewing the input such as a guard monitoring security cameras. While some of my test cases would also be easily spotted by a person looking at the input (e.g. test cases 7 and 8), others are more likely to resemble malicious attacks meant to deceive a person as well as the algorithm, paritcularly test case 2 which uses two actresses who are commonly mistaken for each other. As a part of the stress testing, I use examples of people with different races and genders. Salah et al (2008) found that 3D scans of faces grouped with a clustering algorithm based on face morphology are clustered based on race and gender. Since facial recognition algorithms embed faces based on morphology this suggests images of people of different races and genders would be more difficult to transform into adversarial examples.
 
-Test Cases:
-1. Manipulating image quality
-* Subject: Keira Knightley
-2. People with Similar Faces
-* Subjects: Keira Knightley, Natalie Portman
-3. People with Dissimilar Faces
-* Subjects: Meryl Streep, Keira Knightley
-4. People with Different Genders
-* Subjects: Meryl Streep, Tom Hanks
-5. People of Different Races
-* Subjects: Morgan Freeman, Tom Hanks
-6. People of Different Races and Genders
-* Subjects: Meryl Streep, Morgan Freeman
-7. Non-Human Face
-* Subjects: Tom Hanks, a cat
-8. No Face
-* Subjects: Tom Hanks, a bicycle
 
 ## Getting Started
 
@@ -42,19 +25,12 @@ To train the model:
 Create the training-images directories and subdirectories and the test-images directory. Then copy the contents:
 
 ```
-cp /host/Users/<path>/training-images/* training-images/
+cp /host/Users/<path>/training-images/<subdirectory>/* training-images/
 cp /host/Users/<path>/test-images/* test-images/
 ``````
-Note: The copy will take a long time.
+Note: The copy will take a long time. The FaceScrub data set is so large the Docker environment has difficulty running the alignment step on the entire set, so it is divided into four parts plus the test subjects.
 
-For the lfw folder:
-```
-# if using full LFW data set
-mv training-images/lfw/* training-images/
-# remove lfw directory for either scenario
-rm -r training-images/lfw/
 
-``````
 
 Next follow the instructions from [Demo 3: Training a Classifier](https://cmusatyalab.github.io/openface/demo-3-classifier/) to perform the face detection and alignment.
 
@@ -88,11 +64,9 @@ Testing the classifier:
 * Additional Images (see note)
 
 # Image Sources
-Citations are in Images.md
+Test images are from Wikimedia Commons. 
 
-Wherever possible, the images used in this project are from the LFW set or have a creative commons license. These include the images of Meryl Streep, Tom Hanks, Morgan Freeman, the cat and the bicycle. 
-
-Due to the similarity of Keira Knightley and Natalie Portman, a larger number of images were necessary to train the model to correctly categorize the test images, exceeding what I was able to find under a creative commons license. Some of the images are thus copyrighted and are used in this project under academic fair use. They are included in this repository soley for reproducibility of my results.
+The training images are from [FaceScrub](http://vintage.winklerbros.net/facescrub.html), supplemented by images of Keira Knightley and Natalie Portman. They can be scraped using facescrub.py and facescrub2.py. Many of the training images listed in actorsandactresses.xlsx and natalie_keira.csv are copyrighted and thus are not included directly here. Since many of the FaceScrub images are no longer available and others will become available with time I am including a zip file of the aligned images solely for the reproduciblity of my results.
 
 # Authors
 * Emily Strong
@@ -100,8 +74,6 @@ Due to the similarity of Keira Knightley and Natalie Portman, a larger number of
 # References
 
 Amos, Brandon, Bartosz Ludwiczuk, and Mahadev Satyanarayanan. "Openface: A general-purpose face recognition library with mobile applications." CMU School of Computer Science (2016).
-
-Huang, Gary B., Manu Ramesh, Tamara Berg, and Erik Learned-Miller. "Labeled faces in the wild: A database for studying face recognition in unconstrained environments." Vol. 1, no. 2. Technical Report 07-49, University of Massachusetts, Amherst, 2007.
 
 Salah, Albert A., Nese Alyuz, and Lale Akarun. "Registration of three-dimensional face scans with average face models." Journal of Electronic Imaging 17, no. 1 (2008): 011006.
 
