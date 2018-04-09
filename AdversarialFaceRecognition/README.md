@@ -60,7 +60,7 @@ Testing the classifier:
 
 # Built With
 * OpenFace
-* Labeled Faces In The Wild
+* FaceScrub
 * Additional Images (see note)
 
 # Image Sources
