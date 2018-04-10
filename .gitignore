@@ -10,6 +10,11 @@
 test-images/*
 training-images/*
 aligned-images/*
+AdversarialFaceRecognition/aligned-images/
+AdversarialFaceRecognition/embeddingoutputs/fullfacescrub/
+AdversarialFaceRecognition/training-images/
+Assignment3/Archive 2/
 
 # Keys
 .pem
+
