@@ -17,6 +17,12 @@ This project uses the automatic Docker build from the [OpenFace Setup Instructio
 ```
 docker pull bamos/openface
 docker run -v /Users:/host/Users -p 9000:9000 -p 8000:8000 -t -i bamos/openface /bin/bash
+
+pip install --upgrade pip
+pip install --upgrade setuptools
+pip install imgaug
+
+
 cd /root/openface
 ls /host/Users/
 ``````
@@ -57,6 +63,10 @@ Testing the classifier:
 ``````
 
 # Running the Code
+
+```
+jupyter notebook --ip 0.0.0.0 --allow-root
+``````
 
 # Built With
 * OpenFace
