@@ -3,70 +3,42 @@
 
 Term project for CSYE 6245: Big Data Systems & Intelligence Analytics
 
-This project evaluates the vulnerability of facial recognition algorithms to malicious attacks. Sharif et al (2016) found that these algorithms are vulnerable to adversarial examples just as other image classification algorithms are, however their adversarial input was conspicious and would easily be detected by a person viewing the input such as a guard monitoring security cameras. While some of my test cases would also be easily spotted by a person looking at the input (e.g. test cases 7 and 8), others are more likely to resemble malicious attacks meant to deceive a person as well as the algorithm, paritcularly test case 2 which uses two actresses who are commonly mistaken for each other. As a part of the stress testing, I use examples of people with different races and genders. Salah et al (2008) found that 3D scans of faces grouped with a clustering algorithm based on face morphology are clustered based on race and gender. Since facial recognition algorithms embed faces based on morphology this suggests images of people of different races and genders would be more difficult to transform into adversarial examples.
-
-
 ## Getting Started
 
 ### Prerequisites
 * [Docker](https://www.docker.com/)
 
 ### Installing
+I have adapted the OpenFace automatic Docker build to work with Jupyter Notebook. To create the environment run the following commands in your terminal:
 
-This project uses the automatic Docker build from the [OpenFace Setup Instructions](https://cmusatyalab.github.io/openface/setup/). To create the environment:
 ```
-docker pull bamos/openface
-docker run -v /Users:/host/Users -p 9000:9000 -p 8000:8000 -t -i bamos/openface /bin/bash
-
-pip install --upgrade pip
-pip install --upgrade setuptools
-pip install imgaug
-
-
+docker pull estrong/openface-anaconda2
+docker run -v /Users:/host/Users -p 8888:8888 -t -i estrong/openface-anaconda2:firsttry /bin/bash
 cd /root/openface
-ls /host/Users/
+python setup.py install
+pip2 install -r requirements.txt
+pip2 install -r training/requirements.txt
+./models/get-models.sh
 ``````
-To train the model: 
 
-Create the training-images directories and subdirectories and the test-images directory. Then copy the contents:
+Next copy into the Docker container the notebook, models and test images. Substitute for <path> the directory path to where you have the project on your computer. You can find the path by running ls /host/Users/
 
 ```
-cp /host/Users/<path>/training-images/<subdirectory>/* training-images/
-cp /host/Users/<path>/test-images/* test-images/
-``````
-Note: The copy will take a long time. The FaceScrub data set is so large the Docker environment has difficulty running the alignment step on the entire set, so it is divided into four parts plus the test subjects.
-
-
-
-Next follow the instructions from [Demo 3: Training a Classifier](https://cmusatyalab.github.io/openface/demo-3-classifier/) to perform the face detection and alignment.
-
-```
-./util/align-dlib.py ./training-images/ align outerEyesAndNose ./aligned-images/ --size 96
+cp /host/Users/<path>/FacialRecognition.ipynb FacialRecognition.ipynb
+mkdir generated-embeddings
+cp -r /host/Users/<path>/generated-embeddings/* generated-embeddings/
+mdkir test-images
+cp -r /host/Users/<path>/test-images/* test-images/
 ``````
 
-Generate the embeddings:
-
-```
-rm /root/openface/aligned-images/cache.t7
-./batch-represent/main.lua -outDir ./generated-embeddings/ -data ./aligned-images/
-``````
-
-Finally train the SVM classifier which will be pickled as classifier.pkl:
-
-```
-./demos/classifier.py train ./generated-embeddings/
-``````
-
-Testing the classifier:
-```
-./demos/classifier.py infer ./generated-embeddings/classifier.pkl test-images/keira_knightley1.jpg
-``````
 
 # Running the Code
 
 ```
 jupyter notebook --ip 0.0.0.0 --allow-root
 ``````
+
+Copy the generated URL in your browser. If at any point you interrup a cell that calls the OpenFace model, you will need to shut down the jupyter notebook server and rerun the get-models.sh script.
 
 # Built With
 * OpenFace
@@ -76,15 +48,10 @@ jupyter notebook --ip 0.0.0.0 --allow-root
 # Image Sources
 Test images are from Wikimedia Commons. 
 
-The training images are from [FaceScrub](http://vintage.winklerbros.net/facescrub.html), supplemented by images of Keira Knightley and Natalie Portman. They can be scraped using facescrub.py and facescrub2.py. Many of the training images listed in actorsandactresses.xlsx and natalie_keira.csv are copyrighted and thus are not included directly here. Since many of the FaceScrub images are no longer available and others will become available with time I am including a zip file of the aligned images solely for the reproduciblity of my results.
+The training images are from [FaceScrub](http://vintage.winklerbros.net/facescrub.html), supplemented by images of Keira Knightley and Natalie Portman listed in natalie_keira.csv. They can be scraped using facescrub.py and facescrub2.py. Many of the training images are copyrighted and thus are not included directly here. 
 
 # Authors
 * Emily Strong
 
 # References
-
 Amos, Brandon, Bartosz Ludwiczuk, and Mahadev Satyanarayanan. "Openface: A general-purpose face recognition library with mobile applications." CMU School of Computer Science (2016).
-
-Salah, Albert A., Nese Alyuz, and Lale Akarun. "Registration of three-dimensional face scans with average face models." Journal of Electronic Imaging 17, no. 1 (2008): 011006.
-
-Sharif, Mahmood, Sruti Bhagavatula, Lujo Bauer, and Michael K. Reiter. "Accessorize to a crime: Real and stealthy attacks on state-of-the-art face recognition." In Proceedings of the 2016 ACM SIGSAC Conference on Computer and Communications Security, pp. 1528-1540. ACM, 2016.
