@@ -21,7 +21,7 @@ pip2 install -r training/requirements.txt
 ./models/get-models.sh
 ``````
 
-Next copy into the Docker container the notebook, models and test images. Substitute for <path> the directory path to where you have the project on your computer. You can find the path by running ls /host/Users/
+Next in generated-embeddings/fullfacescrub unzip the model and reps csv. Then copy into the Docker container the notebook, models and test images. Substitute for <path> the directory path to where you have the project on your computer. You can find the path by running ls /host/Users/
 
 ```
 cp /host/Users/<path>/FacialRecognition.ipynb FacialRecognition.ipynb
