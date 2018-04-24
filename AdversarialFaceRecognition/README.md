@@ -27,8 +27,9 @@ Next in generated-embeddings/fullfacescrub unzip the model and reps csv. Then co
 cp /host/Users/<path>/FacialRecognition.ipynb FacialRecognition.ipynb
 mkdir generated-embeddings
 cp -r /host/Users/<path>/generated-embeddings/* generated-embeddings/
-mdkir test-images
+mkdir test-images
 cp -r /host/Users/<path>/test-images/* test-images/
+mkdir output
 ``````
 
 
