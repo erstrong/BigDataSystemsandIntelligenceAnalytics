@@ -48,7 +48,18 @@ Copy the generated URL in your browser. If at any point you interrup a cell that
 # Image Sources
 Test images are from Wikimedia Commons. 
 
-The training images are from [FaceScrub](http://vintage.winklerbros.net/facescrub.html), supplemented by images of Keira Knightley and Natalie Portman listed in natalie_keira.csv. They can be scraped using facescrub.py and facescrub2.py. Many of the training images are copyrighted and thus are not included directly here. 
+The training images are from [FaceScrub](http://vintage.winklerbros.net/facescrub.html), supplemented by images of Keira Knightley and Natalie Portman listed in natalie_keira.csv. They can be scraped using facescrub2.py. Many of the training images are copyrighted and thus are not included directly here. Instead I have provided the trained model and embeddings ("reps.csv"). 
+
+If you would like to train the model yourself, you will need to request the FaceScrub data set from its creators as it is under a CC BY NC ND license. Instructions on how to train a model with OpenFace are available on the [OpenFace website](http://cmusatyalab.github.io/openface/demo-3-classifier/).
+
+# License 
+All code in this project by Emily Strong is licensed under the MIT License https://opensource.org/licenses/MIT
+
+OpenFace and the getRep, infer, compare and makeFace methods are adapted from code copyright Carnegie Mellon University under the Apache 2.0 License https://github.com/cmusatyalab/openface/blob/master/LICENSE
+
+The FaceScrub data set by H.W. Ng and S. Winkler is licensed under CC BY NC ND https://creativecommons.org/licenses/by-nc-nd/3.0/. 
+
+The supplemental data set of images of Keira Knightley and Natalie Portman by Emily Strong is licensed under CC BY NC ND https://creativecommons.org/licenses/by-nc-nd/3.0/. 
 
 # Authors
 * Emily Strong
